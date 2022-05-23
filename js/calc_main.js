@@ -444,7 +444,7 @@ $(document).ready(function(){
 									'</tr>';
 									
 				print_input_data += '<tr>' + 
-										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge ) * 100 ) + '% </td>' + 
+										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge )  ) + ' </td>' + 
 										'<td> Shipping : $' + numberWithCommas(shipping) + ' </td>' + 
 									'</tr>';				
 				
