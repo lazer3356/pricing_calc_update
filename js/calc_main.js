@@ -404,7 +404,7 @@ $(document).ready(function(){
 				
 				$('.acessories_dropdown_list').each(function () {
 					
-					var qty = round_2_digits ( jQuery(this).parent().parent().find('.acessories_qty').val() );
+					var qty = round_2_digits( jQuery(this).parent().parent().find('.acessories_qty').val() );
 					//console.log(qty);
 					var acessory_cost_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).val() ) * qty ) : 0;
 					var acessory_list_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).find('option:selected').attr('data-list-price') ) * qty ) : 0;
@@ -444,14 +444,14 @@ $(document).ready(function(){
 									'</tr>';
 									
 				print_input_data += '<tr>' + 
-										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge )  ) + ' </td>' + 
+										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge ) * 100 - 100 ) + '% </td>' + 
 										'<td> Shipping : $' + numberWithCommas(shipping) + ' </td>' + 
 									'</tr>';				
 				
 				print_input_data += '</table><div class="br_line"><br/></div>';
 				
-				totalCost = totalCost + Number(shipping) + Number ( modificationtotalPrice ); // + Number(surcharge);
-				clientPrice = clientPrice + Number(shipping) + Number ( modificationtotalPrice ); // + Number(surcharge);
+				totalCost = round_2_digits( totalCost + Number(shipping) + Number ( modificationtotalPrice ) ); // + Number(surcharge);
+				clientPrice = round_2_digits( clientPrice + Number(shipping) + Number ( modificationtotalPrice ) ); // + Number(surcharge);
 				
 				
 				print_cost_table += '<tr>' + 
