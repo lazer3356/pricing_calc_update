@@ -64,15 +64,17 @@ $(document).ready(function(){
 								'&nbsp;' +
 							'</label>' +
 							'<div class="flex_subdiv">' +
-							   '<label class="btn btn-secondary btn_l_c active" for="option1">' +
-									'<input type="radio" class="btn-check list_price_option" name="list_price_options' + num1  + '" autocomplete="off" value="C" checked="checked" />' +
+								'<label class="btn btn-secondary btn_l_c active" for="option1" >' +
+									'<input type="radio" class="btn-check list_price_option" name="list_price_options' + num1  + '" autocomplete="off" value="L" checked="checked" />' +
+									'L' +
+								'</label>' +
+								
+							   '<label class="btn btn-secondary btn_l_c " for="option2">' +
+									'<input type="radio" class="btn-check list_price_option" name="list_price_options' + num1  + '" autocomplete="off" value="C" />' +
 									'C' +
 								'</label>' +
 
-								'<label class="btn btn-secondary btn_l_c" for="option2" >' +
-									'<input type="radio" class="btn-check list_price_option" name="list_price_options' + num1  + '" autocomplete="off" value="L"/>' +
-									'L' +
-								'</label>' +
+								
 							'</div>' +
 						'</div>' +
 					
@@ -331,15 +333,26 @@ $(document).ready(function(){
 				
 				$('.list_price').each(function () {
 					
+					var opt_l_c = jQuery(this).parent().parent().parent().find('.list_price_option:checked').val();
+					
 					//modificationprice = Number ( jQuery('.list_price_m ').eq(cnt1).val() );
 					//modificationtotalPrice += modificationprice;
 					modificationprice = 0;
 					price = Number( $(this).val() );
-					listprice = listprice + price;
+					console.log(listprice);
+					if( opt_l_c == "L" ){
+						listprice = listprice + price;
+						var LP_check = '$ ' + numberWithCommas( Number( $(this).val() ) );
+						
+					}else{
+						var LP_check = "N/A";
+						listprice = listprice;
+					}
+					console.log(listprice);
 					//price = price + ( Number( $(this).val() ) * Number(vendorSurcharge) );
 					//price = round_2_digits( ( price * Number(vendor) ) ) ;
 					
-					var opt_l_c = jQuery(this).parent().parent().parent().find('.list_price_option:checked').val();
+					
 					//console.log(opt_l_c);
 					//console.log(upCharge);
 					//console.log(vendor);
@@ -365,7 +378,7 @@ $(document).ready(function(){
 					print_cost_table_sub +=  '<tr>' + 
 												'<td>' + $(this).parent().parent().parent().find('.description').val() + ' </td>' +
 												'<td> $' + numberWithCommas( round_2_digits( Number( price_func_arr[1] ) - Number( price_func_arr[1] ) * discount + shipping_part + modificationprice ) ) + ' </td>' +
-												'<td> $' + numberWithCommas( Number( $(this).val() ) ) + ' </td>' +
+												'<td> ' + LP_check + ' </td>' +
 												'<td> $' + numberWithCommas( round_2_digits(price + shipping_part + modificationprice) ) + ' </td>' +
 											'</tr>';
 					
@@ -378,61 +391,68 @@ $(document).ready(function(){
 				
 				$('.speciality_item_price').each(function () {
 					
-					var speciality_item_cost_price = round_2_digits(  Number( jQuery(this).val() ) );
-					var speciality_item_retail_price = round_2_digits(  speciality_item_cost_price * upCharge );
+					if( jQuery(this).val() ) 
+					{
 					
-					
-					//listprice = listprice + acessory_list_price;
-					totalCost += speciality_item_cost_price;
-					clientPrice += speciality_item_retail_price;
-					
-					//console.log(acessory_cost_price);
-					//console.log(acessory_list_price);
-					//console.log(acessory_retail_percent);
-					
-					
-					print_cost_table_sub +=  '<tr>' + 
-												'<td>' + $(this).parent().parent().parent().find('.speciality_item').val()  + ' </td>' +
-												'<td> $' + speciality_item_retail_price + ' </td>' +
-												'<td> N/A </td>' +
-												'<td> $' + speciality_item_cost_price + ' </td>' +
-											'</tr>';
-				
+						var speciality_item_cost_price = round_2_digits(  Number( jQuery(this).val() ) );
+						var speciality_item_retail_price = round_2_digits(  speciality_item_cost_price * upCharge );
+						
+						
+						//listprice = listprice + acessory_list_price;
+						totalCost += speciality_item_cost_price;
+						clientPrice += speciality_item_retail_price;
+						
+						//console.log(acessory_cost_price);
+						//console.log(acessory_list_price);
+						//console.log(acessory_retail_percent);
+						
+						
+						print_cost_table_sub +=  '<tr>' + 
+													'<td>' + $(this).parent().parent().parent().find('.speciality_item').val()  + ' </td>' +
+													'<td> $' + speciality_item_retail_price + ' </td>' +
+													'<td> N/A </td>' +
+													'<td> $' + speciality_item_cost_price + ' </td>' +
+												'</tr>';
+					}
 				});
 				
 				
 				
 				$('.acessories_dropdown_list').each(function () {
 					
-					var qty = round_2_digits( jQuery(this).parent().parent().find('.acessories_qty').val() );
-					//console.log(qty);
-					var acessory_cost_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).val() ) * qty ) : 0;
-					var acessory_list_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).find('option:selected').attr('data-list-price') ) * qty ) : 0;
-					var acessory_retail_percent = jQuery(this).val() ? round_2_digits( Number( jQuery(this).find('option:selected').attr('data-retail_percent') ) ) : 0;
+					if( jQuery(this).val() ) 
+					{
 					
-					var acessory_retail_price = jQuery(this).val() ? round_2_digits( acessory_list_price * (1 - (acessory_retail_percent/100)) ) : 0;
-					/*
-					console.log(qty);
-					console.log(acessory_cost_price);
-					console.log(acessory_list_price);
-					console.log(acessory_retail_percent);
-					console.log(acessory_retail_price);
-					*/
-					listprice = round_2_digits( listprice + acessory_list_price   );
-					totalCost += round_2_digits( acessory_cost_price  );
-					clientPrice += round_2_digits( acessory_retail_price );
-					
-					//console.log(acessory_cost_price);
-					//console.log(acessory_list_price);
-					//console.log(acessory_retail_percent);
-					
-					
-					print_cost_table_sub +=  '<tr>' + 
-												'<td>' + $(this).find('option:selected').text() + ' X ( ' + qty + ' )</td>' +
-												'<td> $' + numberWithCommas( acessory_retail_price ) + ' </td>' +
-												'<td> $' + numberWithCommas( acessory_list_price  ) + ' </td>' +
-												'<td> $' + numberWithCommas( acessory_cost_price ) + ' </td>' +
-											'</tr>';
+						var qty = round_2_digits( jQuery(this).parent().parent().find('.acessories_qty').val() );
+						//console.log(qty);
+						var acessory_cost_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).val() ) * qty ) : 0;
+						var acessory_list_price = jQuery(this).val() ? round_2_digits( Number( jQuery(this).find('option:selected').attr('data-list-price') ) * qty ) : 0;
+						var acessory_retail_percent = jQuery(this).val() ? round_2_digits( Number( jQuery(this).find('option:selected').attr('data-retail_percent') ) ) : 0;
+						
+						var acessory_retail_price = jQuery(this).val() ? round_2_digits( acessory_list_price * (1 - (acessory_retail_percent/100)) ) : 0;
+						/*
+						console.log(qty);
+						console.log(acessory_cost_price);
+						console.log(acessory_list_price);
+						console.log(acessory_retail_percent);
+						console.log(acessory_retail_price);
+						*/
+						listprice = round_2_digits( listprice + acessory_list_price   );
+						totalCost += round_2_digits( acessory_cost_price  );
+						clientPrice += round_2_digits( acessory_retail_price );
+						
+						//console.log(acessory_cost_price);
+						//console.log(acessory_list_price);
+						//console.log(acessory_retail_percent);
+						
+						
+						print_cost_table_sub +=  '<tr>' + 
+													'<td>' + $(this).find('option:selected').text() + ' X ( ' + qty + ' )</td>' +
+													'<td> $' + numberWithCommas( acessory_retail_price ) + ' </td>' +
+													'<td> $' + numberWithCommas( acessory_list_price  ) + ' </td>' +
+													'<td> $' + numberWithCommas( acessory_cost_price ) + ' </td>' +
+												'</tr>';
+					}
 				
 				});
 				
@@ -440,11 +460,13 @@ $(document).ready(function(){
 
 				print_input_data += '<tr>' + 
 										'<td> Vendor : ' + $('#main_unit option:selected').text() + ' </td>' + 
-										'<td> Client Scale : ' + $('#discount option:selected').text() + ' </td>' + 
+										'<td> Multiplier : ' + $('#main_unit option:selected').val() + ' </td>' + 
+										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge ) * 100 - 100 ) + '% </td>' + 
 									'</tr>';
 									
 				print_input_data += '<tr>' + 
-										'<td> Surcharges : ' + round_2_digits ( Number ( vendorSurcharge ) * 100 - 100 ) + '% </td>' + 
+										'<td> Upcharge : ' + jQuery('#main_unit option:selected').attr('data-upcharge') + ' % </td>' + 
+										'<td> Client Scale : ' + $('#discount option:selected').text() + ' </td>' + 
 										'<td> Shipping : $' + numberWithCommas(shipping) + ' </td>' + 
 									'</tr>';				
 				
