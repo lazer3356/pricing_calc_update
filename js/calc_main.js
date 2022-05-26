@@ -137,7 +137,7 @@ $(document).ready(function(){
 								'<input type="number" id="acessories_qty_1" class="number_req form-control acessories_qty" name ="acessories_qty_1" value="1"/>' +
 							'</div>	' +
 						'</div>' +
-						'<div class="col-md-8">' +
+						'<div class="col-md-9">' +
 							'<label>' +
 								'<span class="red"> &nbsp </span>' +
 							'</label>' +
@@ -323,6 +323,7 @@ $(document).ready(function(){
 											
 				let print_input_data = '<table id="input_data_table_4" class="table_print_pdf">';
 				
+				
 				let print_ind_data = '';
 				
 				let print_cost_table_sub = '';
@@ -408,13 +409,23 @@ $(document).ready(function(){
 						
 						
 						print_cost_table_sub +=  '<tr>' + 
-													'<td>' + $(this).parent().parent().parent().find('.speciality_item').val()  + ' </td>' +
+													'<td> Speciality item : ' + $(this).parent().parent().parent().find('.speciality_item').val()  + ' </td>' +
 													'<td> $' + speciality_item_retail_price + ' </td>' +
 													'<td> N/A </td>' +
 													'<td> $' + speciality_item_cost_price + ' </td>' +
 												'</tr>';
 					}
 				});
+				
+				
+				
+				let print_acessory_table_header = '';
+				let print_acessories_data = '';
+				let print_acessory_table_sub = '';				
+				
+				var acessory_list_price_total = 0;
+				var acessory_cost_price_total = 0;
+				var acessory_retail_price_total = 0;
 				
 				
 				
@@ -441,21 +452,56 @@ $(document).ready(function(){
 						totalCost += round_2_digits( acessory_cost_price  );
 						clientPrice += round_2_digits( acessory_retail_price );
 						
+						
+						acessory_retail_price_total += acessory_retail_price;
+						acessory_list_price_total += acessory_list_price;
+						acessory_cost_price_total += acessory_cost_price;
+						
+						
 						//console.log(acessory_cost_price);
 						//console.log(acessory_list_price);
 						//console.log(acessory_retail_percent);
 						
 						
-						print_cost_table_sub +=  '<tr>' + 
-													'<td>' + $(this).find('option:selected').text() + ' X ( ' + qty + ' )</td>' +
-													'<td> $' + numberWithCommas( acessory_retail_price ) + ' </td>' +
-													'<td> $' + numberWithCommas( acessory_list_price  ) + ' </td>' +
-													'<td> $' + numberWithCommas( acessory_cost_price ) + ' </td>' +
+						print_acessory_table_sub +=  '<tr>' + 
+													'<td>' + $(this).find('option:selected').text() + ' )</td>' +
+													'<td> ' + qty + ' </td>' +
+													//'<td> $' + numberWithCommas( acessory_retail_price ) + ' </td>' +
+													//'<td> $' + numberWithCommas( acessory_list_price  ) + ' </td>' +
+													//'<td> $' + numberWithCommas( acessory_cost_price ) + ' </td>' +
 												'</tr>';
 					}
 				
 				});
 				
+				
+				if( jQuery('.acessories_dropdown_list').val() ) 
+				{
+					
+					print_cost_table_sub +=  '<tr>' + 
+													'<td> Acessories </td>' +
+													'<td> $' + numberWithCommas( acessory_retail_price_total ) + ' </td>' +
+													'<td> $' + numberWithCommas( acessory_list_price_total  ) + ' </td>' +
+													'<td> $' + numberWithCommas( acessory_cost_price_total ) + ' </td>' +
+												'</tr>';
+												
+					print_acessory_table_header +=  '<tr>' + 
+													'<td class="text-bold" > Acessories </td>' +
+													'<td class="text-bold" > Quantity </td>' +
+													//'<td> $' + numberWithCommas( acessory_retail_price ) + ' </td>' +
+													//'<td> $' + numberWithCommas( acessory_list_price  ) + ' </td>' +
+													//'<td> $' + numberWithCommas( acessory_cost_price ) + ' </td>' +
+												'</tr>';
+												
+												
+					print_acessories_data += '<table id="input_data_table_5" class="table_print_pdf">';
+					
+					
+					print_acessories_data += print_acessory_table_header;
+					print_acessories_data += print_acessory_table_sub;						
+					print_acessories_data += '</table><div class="br_line"><br/></div>';
+												
+				}
 				
 
 				print_input_data += '<tr>' + 
@@ -523,6 +569,8 @@ $(document).ready(function(){
 				$('#editor').append(print_project_info);
 				$('#editor').append(print_cost_table);								
 				$('#editor').append(print_input_data);
+				$('#editor').append(print_acessories_data);
+				
 				
 			});	
 			
