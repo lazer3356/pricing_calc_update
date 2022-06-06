@@ -207,6 +207,9 @@ $(document).ready(function(){
 			ac_d_num1 = 0;
 			
 			jQuery("#priceCalcForm").on("click",".btn_l_c", function(){
+				if(jQuery(this).find('input[type="radio"]').hasClass('neutral')) {
+					e.preventDefault();
+				}
 				jQuery(this).parent().find( ".btn_l_c" ).removeClass('active');
 				jQuery(this).parent().find('input[type="radio"]').attr("checked",false);
 				jQuery(this).addClass('active');
